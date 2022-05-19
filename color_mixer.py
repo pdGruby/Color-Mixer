@@ -6,7 +6,7 @@ import re
 import colorsys
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-m', '--mode', help='choose the script mode', default='mix')
+parser.add_argument('-m', '--mode', help='select script mode: mix, lowest, highest, mix-saturate', default='mix')
 parser.add_argument('colors', nargs='*')
 
 args = parser.parse_args()
@@ -212,10 +212,10 @@ class Color:
 
     @staticmethod
     def calc_hue(rgb):
-        standarized_rgb = [rgb[0]/255, rgb[1]/255, rgb[2]/255]
-        r, g, b = standarized_rgb
+        standardized_rgb = [rgb[0]/255, rgb[1]/255, rgb[2]/255]
+        r, g, b = standardized_rgb
 
-        if max(standarized_rgb) == 0:
+        if max(standardized_rgb) == 0:
             return 0
 
         if r == g == b:
@@ -248,12 +248,15 @@ class Color:
 
     @staticmethod
     def calc_lightness_and_saturation(rgb):
-        standarized_rgb = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255]
-        maximum = max(standarized_rgb)
-        minimum = min(standarized_rgb)
+        standardized_rgb = [rgb[0] / 255, rgb[1] / 255, rgb[2] / 255]
+        maximum = max(standardized_rgb)
+        minimum = min(standardized_rgb)
 
         if maximum == 0:
             return 0, 0
+
+        if maximum == 1 and minimum == 1:
+            return 1, 0
 
         lightness = 0.5 * (maximum + minimum)
         if lightness <= 0.5:
@@ -265,5 +268,3 @@ class Color:
 
 
 Color(mode=args.mode, colors=args.colors).run_app()
-
-# Shebang
